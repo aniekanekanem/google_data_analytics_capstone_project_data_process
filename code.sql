@@ -15,7 +15,8 @@ The tool I will use for processing the data is SQL because it is handy for worki
 After cross checking data in accordance with the credibility check, I have been able to confirm the data's integrity.
 */
 
---    a. Steps taken to ensure data is clean using SQL
+-- DATA INSPECTION AND CLEANING
+-- a. Steps taken to ensure data is clean using SQL
 
 -- i. Checking for duplicates:
 SELECT COUNT(*) AS duplicate_rows_count
@@ -63,9 +64,10 @@ Member_casual
 LIKE '%NA%'
 ---------------------------------------------------------------------------
 
+-- DATA PROCESSING PROPER
 -- b. Calculating the length of each ride as ‘ride_length_hms’.
-	SELECT *,
-FORMAT_TIMESTAMP('%H:%M:%S', TIMESTAMP_SECONDS(TIMESTAMP_DIFF(ended_at, started_at, SECOND))) AS ride_length_hms
+SELECT *,
+    FORMAT_TIMESTAMP('%H:%M:%S', TIMESTAMP_SECONDS(TIMESTAMP_DIFF(ended_at, started_at, SECOND))) AS ride_length_hms
 FROM `motivate_int_inc.bike_sharing_2022_nov`
 ---------------------------------------------------------------------------
 
@@ -122,7 +124,7 @@ FROM `motivate_int_inc.bike_sharing_2022_nov`
 WHERE member_casual = casual;
 ---------------------------------------------------------------------------
 
--- iii. Calculating the maximum ride length using SQL
+-- iii. Calculating the maximum ride length
 SELECT
 FORMAT_TIMESTAMP('%H:%M:%S', TIMESTAMP_SECONDS(MAX(TIMESTAMP_DIFF(ended_at, started_at, SECOND)))) AS max_ride_length_hms
 FROM `motivate_int_inc.bike_sharing_2022_nov`;
@@ -178,7 +180,8 @@ GROUP BY starting_day
 ---------------------------------------------------------------------------
 
 /*
-  b. Analysis from the combined tables
+COMBINED TABLES
+  b. processing of data from the combined tables
 I combined the 6 tables together to form one table of data using SQL.  Find below the code:
 */
 CREATE TABLE `motivate_int_inc.divvy_tripdata_combined2` AS
@@ -261,6 +264,12 @@ WHERE rideable_type = 'classic_bike'
 SELECT  COUNT(rideable_type)
 FROM `my-data-project-24723.motivate_int_inc.divvy_tripdata_combined2`
 WHERE rideable_type = 'electric_bike'
+---------------------------------------------------------------------------
+
+-- for docked_bike
+SELECT  COUNT(rideable_type)
+FROM `my-data-project-24723.motivate_int_inc.divvy_tripdata_combined2`
+WHERE rideable_type = 'docked_bike'
 ---------------------------------------------------------------------------
 
 /*
@@ -357,58 +366,58 @@ xii. Getting the busiest weekday:
 -- for sundays
 SELECT COUNT(*) AS count
 FROM `motivate_int_inc.divvy_tripdata_combined2`
-WHERE EXTRACT(DAYOFWEEK FROM ended_at) = 1
--- Result: 177405
+WHERE EXTRACT(DAYOFWEEK FROM started_at) = 1
+-- Result: 176711
 ---------------------------------------------------------------------------
 
 -- for mondays
 SELECT COUNT(*) AS count
 FROM `motivate_int_inc.divvy_tripdata_combined2`
-WHERE EXTRACT(DAYOFWEEK FROM ended_at) = 2
--- Result: 204365
+WHERE EXTRACT(DAYOFWEEK FROM started_at) = 2
+-- Result: 204207
 ---------------------------------------------------------------------------
 
 -- for tuesdays
 SELECT COUNT(*) AS count
 FROM `motivate_int_inc.divvy_tripdata_combined2`
-WHERE EXTRACT(DAYOFWEEK FROM ended_at) = 3
--- Result: 259289
+WHERE EXTRACT(DAYOFWEEK FROM started_at) = 3
+-- Result: 259377
 ---------------------------------------------------------------------------
 
 -- for tuesdays
 SELECT COUNT(*) AS count
 FROM `motivate_int_inc.divvy_tripdata_combined2`
-WHERE EXTRACT(DAYOFWEEK FROM ended_at) = 4
--- Result: 259989
+WHERE EXTRACT(DAYOFWEEK FROM started_at) = 4
+-- Result: 260082
 ---------------------------------------------------------------------------
 
 -- for tuesdays
 SELECT COUNT(*) AS count
 FROM `motivate_int_inc.divvy_tripdata_combined2`
-WHERE EXTRACT(DAYOFWEEK FROM ended_at) = 5
--- Result: 259643
+WHERE EXTRACT(DAYOFWEEK FROM started_at) = 5
+-- Result: 259749
 ---------------------------------------------------------------------------
 
 -- for tuesdays
 SELECT COUNT(*) AS count
 FROM `motivate_int_inc.divvy_tripdata_combined2`
-WHERE EXTRACT(DAYOFWEEK FROM ended_at) = 6
--- Result: 226074
+WHERE EXTRACT(DAYOFWEEK FROM started_at) = 6
+-- Result: 226383
 ---------------------------------------------------------------------------
 
 -- for tuesdays
 SELECT COUNT(*) AS count
 FROM `motivate_int_inc.divvy_tripdata_combined2`
-WHERE EXTRACT(DAYOFWEEK FROM ended_at) = 7
--- Result: 198790
+WHERE EXTRACT(DAYOFWEEK FROM started_at) = 7
+-- Result: 199046
 ---------------------------------------------------------------------------
 
 /*
 xiii. Getting the busiest season:  There are four seasons which are winter, summer, spring and fall.  
 
 Winter does occur during the months of December, January, and February in the Northern Hemisphere, and also occurs during June, July, and August in the Southern Hemisphere.  In this context, Cyclistic is based in Chicago, and Chicago is located in the Northern Hemisphere, hence there will be winter in the months of December, January, and February.  For other seasons, the following applies:
-    • Spring: March, April, May
-    • Summer: June, July, August
-    • Fall: September, October, November
-Based on these, the busiest season will be gotten from the busiest months which has been deduced from the code in viii above.  April being the busiest falls under Spring.  This means the busiest season is Spring.
+Spring: March, April, May
+Summer: June, July, August
+Fall: September, October, November
+Based on these, the busiest season will be gotten from the busiest months which has been deduced from the code in viii above.  April being the busiest happens to be part of the period where Spring occurs.  This means the busiest season is Spring.
 */
