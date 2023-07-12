@@ -21,24 +21,37 @@ After cross checking data in accordance with the credibility check, I have been 
 -- i. Checking for duplicates:
 SELECT COUNT(*) AS duplicate_rows_count
 FROM (
-   SELECT *, COUNT(*) AS count
+   SELECT ride_id, 
+          rideable_type, 
+          started_at, 
+          ended_at, 
+          start_station_name, 
+          start_station_id, 
+          end_station_name, 
+          end_station_id, 
+          start_lat, 
+          start_lng, 
+          end_lat, 
+          end_lng, 
+          member_casual,
+          COUNT(*) AS count
    FROM `motivate_int_inc.bike_sharing_2022_nov`
-   GROUP BY	ride_id, 
-rideable_type, 
-started_at, 
-ended_at, 
-start_station_name, 
-start_station_id, 
-end_station_name, 
-end_station_id, 
-start_lat, 
-start_lng, 
-end_lat, 
-end_lng, 
-member_casual,
+   GROUP BY ride_id, 
+            rideable_type, 
+            started_at, 
+            ended_at, 
+            start_station_name, 
+            start_station_id, 
+            end_station_name, 
+            end_station_id, 
+            start_lat, 
+            start_lng, 
+            end_lat, 
+            end_lng, 
+            member_casual
    HAVING COUNT(*) > 1
-) 
-AS duplicates;
+) AS duplicates;
+
 
 -- The above code was carried out for the remaining 5 data
 ---------------------------------------------------------------------------
